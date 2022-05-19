@@ -1,3 +1,10 @@
+<?php
+
+include("db.php");
+session_start();
+
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -55,22 +62,41 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
 
              <!-- //Alert END -->
        
-             <?php  } } ?>
+             <?php  } 
+            else if($msg == "err"){
+              ?>
 
+              <!-- //Alert Start -->
+            
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                  <span class="sr-only">Close</span>
+                </button>
+                <strong>Hey There!</strong> Invalid Account Try Again.
+              </div>
+
+             <!-- //Alert END -->
+
+
+<?php
+            }
+            } ?>
+              <form action="login.php" method="post">
               <div class="form-outline form-white mb-4">
-                <input type="email" id="typeEmailX" class="form-control form-control-lg" />
+                <input type="email"  name="email" class="form-control form-control-lg" />
                 <label class="form-label" for="typeEmailX">Email</label>
               </div>
 
               <div class="form-outline form-white mb-4">
-                <input type="password" id="typePasswordX" class="form-control form-control-lg" />
+                <input type="password" name="pass" class="form-control form-control-lg" />
                 <label class="form-label" for="typePasswordX">Password</label>
               </div>
 
               <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
 
-              <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-
+              <input class="btn btn-outline-light btn-lg px-5" type="submit" name="login" value="Login">
+              </form>
               <div class="d-flex justify-content-center text-center mt-4 pt-1">
                 <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
                 <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
@@ -97,3 +123,31 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>
+
+<?php
+
+if(isset($_POST['login'])){
+
+  $email = $_POST['email'];
+  $pass = $_POST['pass'];
+
+  echo $email , $pass;
+ $check = $con->query("SELECT * FROM `user` WHERE `email`='$email'");
+
+  if($check){
+  foreach($check as $user){
+    if($user['password']==$pass){
+      $_SESSION['UserName']= $user['name'];
+      header("location:index.php");
+
+    }else{
+
+      header("location:login.php?msg=err");
+  
+    }
+  }
+  }
+
+}
+
+?>
