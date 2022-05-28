@@ -2,6 +2,9 @@
 
 include("db.php");
 session_start();
+if(isset($_SESSION['UserName'])){
+  header("location:index.php");
+}else{
 
 ?>
 
@@ -134,10 +137,16 @@ if(isset($_POST['login'])){
   echo $email , $pass;
  $check = $con->query("SELECT * FROM `user` WHERE `email`='$email'");
 
-  if($check){
+$res = mysqli_num_rows($check);
+
+  if($res > 0){
+
   foreach($check as $user){
+
     if($user['password']==$pass){
+
       $_SESSION['UserName']= $user['name'];
+      
       header("location:index.php");
 
     }else{
@@ -146,8 +155,12 @@ if(isset($_POST['login'])){
   
     }
   }
+  }else{
+
+    header("location:login.php?msg=err");
+
   }
 
 }
-
+}
 ?>
