@@ -3,7 +3,7 @@
 session_start();
 
 if(isset($_SESSION['UserName'])){
-
+include("db.php");
 
     ?>
 
@@ -168,6 +168,10 @@ else if(isset($_GET['parties_reg']))
 else if(isset($_GET['profile']))
 {
   include("php/profile.php");
+}
+else if(isset($_GET['addvotting']))
+{
+  include("php/addvotting.php");
 }
 else{
   include("php/dashboard.php");
